@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Character from "./Character";
 import Controls from "./Controls";
 
-// don't need to import React when using functional?
 
 const Simpsons = (props) => {
   const {
