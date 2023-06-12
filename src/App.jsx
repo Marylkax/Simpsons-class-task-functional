@@ -11,7 +11,7 @@ const App  = () => {
   const [search, setSearch] = useState("");
   const [alphabetList, setAlphabetList] = useState("");
   // reset?
-  // alaphabetList
+
 
 const onInitialise = async () => {
     const {data} = await axios.get(
