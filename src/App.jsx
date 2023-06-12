@@ -1,68 +1,123 @@
-import React, { Component } from "react";
+// import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./components/Loading";
 import Simpsons from "./components/Simpsons";
 import "./App.css";
 
-class App extends Component {
-  state = {};
+const App  = () => {
+  const [simpsons, setSimpsons] = useState();
+  const [liked, setLiked] = useState("");
+  const [search, setSearch] = useState("");
+  const [alphabetList, setAlphabetList] = useState("");
+  // reset?
+  // alaphabetList
 
-  async componentDidMount() {
-    const { data } = await axios.get(
+const onInitialise = async () => {
+    const {data} = await axios.get(
       `https://thesimpsonsquoteapi.glitch.me/quotes?count=10`
     );
-
-    //fixed the api data to have unique id
-    data.forEach((element, index) => {
+  
+   data.forEach((element, index) => {
       element.id = index + Math.random();
     });
 
-    this.setState({ simpsons: data });
-  }
-
-  onLikeToggle = (id) => {
-    const indexOf = this.state.simpsons.findIndex((char) => {
-      return char.id === id;
-    });
-    const simpsons = [...this.state.simpsons];
-    //invert if liked or not liked
-    simpsons[indexOf].liked = !simpsons[indexOf].liked;
-    this.setState({ simpsons });
+    setSimpsons(data); // historic way is a mix of class and functional
   };
 
-  onDelete = (id) => {
-    const indexOf = this.state.simpsons.findIndex((char) => {
+  useEffect(() => {
+    onInitialise();
+  }, []); // API calls need to run once, dependency array 
+
+  const onLikeToggle = (id) => {
+    const _simpsons = [...simpsons];
+    const indexOf = simpsons.findIndex((char) => {
       return char.id === id;
     });
-    const simpsons = [...this.state.simpsons];
-    simpsons.splice(indexOf, 1);
-    this.setState({ simpsons });
+   
+    _simpsons[indexOf].liked = !_simpsons[indexOf].liked; //switches between true and false
+    setSimpsons(_simpsons)
   };
 
-  render() {
-    const { simpsons } = this.state;
+  const onDelete = (id) => {
+    const _simpsons = [...simpsons];
+    const indexOf = _simpsons.findIndex((char) => {
+      return char.id === id;
+    });
+    _simpsons.splice(indexOf, 1);
+    setSimpsons(_simpsons)
+  };
 
-    if (!simpsons) return <Loading />;
+  const onSearchInput = (e) => {
+    setSearch(e.target.value);
+    // this.setState({ reset: false });
+  };
 
-    if (simpsons.length === 0) return <p>You deleted everything!</p>;
+  const onLikeToggleInput = (e) => {
+    setLiked(e.target.value);
+    // this.setState({ reset: false });
+  };
 
-    //calculate the total
+  const onAlphabetList = (e) => {
+   setAlphabetList(e.target.value );
+  };
+  
+
+  // const onReset = (e) => {
+  // //  this.onInitialise();
+  //  setOnReset (reset , true);
+  // };
+
+   if (!simpsons) return <Loading />;
+
+  if (simpsons.length === 0) return <p>You deleted everything!</p>;
+
+  let filteredList = [...simpsons];
+
     let total = 0;
     simpsons.forEach((char) => {
       if (char.liked) total++;
     });
+    
+
+    // if (onsearchInput){
+    //   filteredList = filteredList.filter((item)=> {
+    //   console.log(item.character);
+    //     if
+    //   (item.character.toLowerCase().includes(searchInput.toLowerCase())) {
+    //       return true;
+    //     }
+    //   }); }
+
+    //   if (onAlphabetList === 'asc'){
+    //     filteredList.sort((itemOne, itemTwo) => {
+    //       if (itemOne.character > itemTwo.character) return 1;
+    //       if (itemOne.character < itemTwo.character) return -1;
+    //     })
+    //   } else if (onAlphabetList === 'desc'){
+    //     filteredList.sort((itemOne, itemTwo) => {
+    //       if (itemOne.character < itemTwo.character) return 1;
+    //       if (itemOne.character > itemTwo.character) return -1;
+    //     })
+    //   } 
+    // how to put this in
 
     return (
       <>
         <h1>Total no of liked chars #{total}</h1>
         <Simpsons
-          simpsons={simpsons}
-          onDelete={this.onDelete}
-          onLikeToggle={this.onLikeToggle}
+          // searchInput={onsearchInput}
+          alphabetList={onAlphabetList}
+          // onReset={this.onReset}
+          // onSearchInput={onSearchInput}
+          simpsons={filteredList}
+          onDelete={onDelete} // function can now be passed down to Simpsons, then to character. Passed directly  in current scope
+          onLikeToggle={onLikeToggle}
+          onAlphabetList={onAlphabetList}
         />
       </>
     );
-  }
+
 }
 
 export default App;

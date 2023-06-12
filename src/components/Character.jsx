@@ -4,11 +4,26 @@ import Quote from "./Quote";
 import Image from "./Image";
 import Delete from "./Delete";
 
-class Character extends Component {
-  render() {
-    const { character, quote, image, id, characterDirection, liked } =
-      this.props.item;
-    const { onLikeToggle, onDelete } = this.props;
+const Character = (props) => {
+  const { character, quote, image, id, characterDirection, liked } =
+      props.item;
+    const { onLikeToggle, onDelete } = props;
+
+    if (characterDirection === "Left") {
+      return (
+        <div className="characterContainer">
+          <Name
+            character={character}
+            onLikeToggle={onLikeToggle}
+            id={id}
+            liked={liked}
+          />
+          <Image image={image} />
+          <Quote quote={quote} />
+          <Delete onDelete={onDelete} id={id} />
+        </div>
+      );
+    }
 
     return (
       <div className="characterContainer">
@@ -20,10 +35,50 @@ class Character extends Component {
         />
         <Quote quote={quote} />
         <Image image={image} />
-        <Delete onDelete={onDelete} id={id} />
+        <Delete onDelete={onDelete} id={id} /> 
+        {/* passes to Delete */}
       </div>
     );
-  }
 }
+
+// class Character extends Component {
+//   render() {
+//     const { character, quote, image, id, characterDirection, liked } =
+//       this.props.item;
+//     const { onLikeToggle, onDelete } = this.props;
+
+//     if (characterDirection === "Left") {
+//       return (
+//         <div className="characterContainer">
+//           <Name
+//             character={character}
+//             onLikeToggle={onLikeToggle}
+//             id={id}
+//             liked={liked}
+//           />
+//           <Image image={image} />
+//           <Quote quote={quote} />
+//           <Delete onDelete={onDelete} id={id} /> 
+//           {/* passes to Delete */}
+//         </div>
+//       );
+//     }
+
+//     return (
+//       <div className="characterContainer">
+//         <Name
+//           character={character}
+//           onLikeToggle={onLikeToggle}
+//           id={id}
+//           liked={liked}
+//         />
+//         <Quote quote={quote} />
+//         <Image image={image} />
+//         <Delete onDelete={onDelete} id={id} /> 
+//         {/* passes to Delete */}
+//       </div>
+//     );
+//   }
+// }
 
 export default Character;

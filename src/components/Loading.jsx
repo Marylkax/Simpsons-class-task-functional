@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 
-class Loading extends Component {
-  render() {
-    return <div>Loading...</div>;
-  }
+
+const Loading = (props) => {
+  return <div>Loading...</div>;
 }
+// class Loading extends Component {
+//   render() {
+//     return <div>Loading...</div>;
+//   }
+// }
 
 export default Loading;
